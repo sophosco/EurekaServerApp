@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: eurekaservice-deployment
+  namespace: dev
+  labels:
+    app: eurekaservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eurekaservice
+  template:
+    metadata:
+      labels:
+        app: eurekaservice
+    spec:
+      containers:
+        - name: eurekaservice
+          image: 887482798966.dkr.ecr.us-east-2.amazonaws.com/sophosstore/eurekaservice:beta
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "200m"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8761
+          - containerPort: 443
+          envFrom:
+          - configMapRef:
+              name: eurekaservice-configmap
